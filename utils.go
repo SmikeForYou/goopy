@@ -5,7 +5,16 @@ import (
 )
 
 func toSelectQuery(tableName string, expressions ...goqu.Expression) *goqu.SelectDataset {
-	return goqu.Select("*").From(tableName).Where(expressions...)
+	if len(expressions) == 1 {
+		if sd, ok := expressions[0].(*goqu.SelectDataset); ok {
+			return sd
+		}
+	}
+	base := goqu.Select("*").From(tableName)
+	if expressions == nil {
+		return base
+	}
+	return base.Where(expressions...)
 }
 
 func toInsertQuery(tableName string, in ...any) *goqu.InsertDataset {

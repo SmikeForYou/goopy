@@ -26,6 +26,13 @@ func TestQuerier_toSelectQuery(t *testing.T) {
 	assert.Equal(t, []any{int64(1)}, args)
 }
 
+func TestQuerier_toSelectQuerySelectDataset(t *testing.T) {
+	builder := toSelectQuery("users", goqu.Select("*").From("another_users").Where(goqu.C("uuid").Eq(1)))
+	sql, args, _ := builder.Prepared(true).ToSQL()
+	assert.Equal(t, "SELECT * FROM \"another_users\" WHERE (\"uuid\" = ?)", sql)
+	assert.Equal(t, []any{int64(1)}, args)
+}
+
 func TestQuerier_toInsertQuery(t *testing.T) {
 	userStruct := struct {
 		Id    int64  `db:"id"`
