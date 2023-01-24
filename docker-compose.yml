@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  postgres:
+    restart: always
+    image: postgres:14.5
+    ports:
+      - target: 5432
+        published: 5433
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+      POSTGRES_DB: test
